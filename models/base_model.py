@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""base model class for AirBnB"""
+"""The base model class for AirBnB"""
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
 import models
@@ -11,9 +11,8 @@ Base = declarative_base()
 
 
 class BaseModel:
-    """defines all common attributes/methods
-    for other classes
-    """
+    """Class defines all common attributes/methods
+    for other classes"""
     id = Column(String(60), unique=True, nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
     updated_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
@@ -45,29 +44,29 @@ class BaseModel:
             self.created_at = self.updated_at = datetime.now()
 
     def __str__(self):
-        """a string
+        """returns a string
         Return:
-            string of class name, id, and dictionary
+            returns a string of class name, id, and dictionary
         """
         return "[{}] ({}) {}".format(
             type(self).__name__, self.id, self.__dict__)
 
     def __repr__(self):
-        """return string representaion
+        """return a string representaion
         """
         return self.__str__()
 
     def save(self):
-        """public instance attribute updated_at to current
+        """updates the public instance attribute updated_at to current
         """
         self.updated_at = datetime.now()
         models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
-        """creates dictionary of the class
+        """creates dictionary of the class  and returns
         Return:
-            dictionary of all the key values in __dict__
+            returns a dictionary of all the key values in __dict__
         """
         my_dict = dict(self.__dict__)
         my_dict["__class__"] = str(type(self).__name__)

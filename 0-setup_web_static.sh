@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sets up a web server for deployment of web_static.
+# Web server to deployment web_static.
 
 apt-get update
 apt-get install -y nginx
@@ -14,25 +14,22 @@ chgrp -R ubuntu /data/
 
 printf %s "server {
     listen 80 default_server;
-        listen [::]:80 default_server;
-	    add_header X-Served-By $HOSTNAME;
-	        root   /var/www/html;
-		    index  index.html index.htm;
+    listen [::]:80 default_server;
+    add_header X-Served-By $hostname;
+    root   /var/www/html;
+    index  index.html index.htm;
+    location /hbnb_static {
+        alias /data/web_static/current;
+        index index.html index.htm;
+    }
+    location /redirect_me {
+        return 301 http://github.com/samuelfosu;
+    }
+    error_page 404 /404.html;
+    location /404 {
+      root /var/www/html;
+      internal;
+    }
+}" > /etc/nginx/sites-available/default
 
-		        location /hbnb_static {
-				alias /data/web_static/current;
-					index index.html index.htm;
-					    }
-
-				        location /redirect_me {
-						return 301 http://cuberule.com/;
-						    }
-
-					        error_page 404 /404.html;
-						    location /404 {
-						          root /var/www/html;
-							        internal;
-								    }
-						    }" > /etc/nginx/sites-available/default
-
-					    service nginx restart
+service nginx restart
